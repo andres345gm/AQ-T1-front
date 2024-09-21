@@ -29,7 +29,7 @@
 	</nav>
 
 	<div class="corner2">
-		<a href="/registro">
+		<a href="/">
 			Salir
 		</a>
 		<div class="dinero-div">
