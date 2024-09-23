@@ -2,9 +2,42 @@
 	import logo from '$lib/images/pokemon.svg';
 	import welcome_fallback from '$lib/images/svelte-welcome.png';
 	import { goto } from '$app/navigation'; // Importa la función `goto`
+	import axios from 'axios';
 
+	let username = '';
+	let password = '';
+	let repeatPassword = '';
+	let errorMessage = '';
+
+
+	
 	function irAPagina() {
-		goto('/user-pokes'); // Navega a la página /user-pokes
+		// Evaluar si los campos están llenos
+		if (!username || !password || !repeatPassword) {
+			errorMessage = 'Por favor, completa todos los campos';
+			return;
+		}
+
+		// Evaluar si las contraseñas son iguales
+		if (password !== repeatPassword) {
+			errorMessage = 'Las contraseñas no coinciden';
+			return;
+		}
+
+		// Si todo es correcto, navegar a la página
+		//enviar los datos al back 
+		axios.post('http://127.0.0.1:8000/user', {
+			user: username,
+			password: password
+		}).then((response) => {
+			//guardar el id del usuario en local storage
+			localStorage.setItem('user_id', response.data.id);
+			localStorage.setItem('user_balance', response.data.balance);
+			console.log(response);
+			goto('/user-pokes');
+		}).catch((error) => {
+			console.log(error);
+		});
 	}
 </script>
 
@@ -14,40 +47,35 @@
 </svelte:head>
 
 <section>
-
 	<div class="bienvenida">
 		<picture class="pokemon">
 			<source srcset={logo} type="image/webp" />
-			<img src={welcome_fallback} alt="Welcome" width="90px"/>
+			<img src={welcome_fallback} alt="Welcome" width="90px" />
 		</picture>
 
-		<h1 >
-			Registrate en  pokedex
-		</h1>
+		<h1>Registrate en pokedex</h1>
 	</div>
-	
 
-	<h2>
-		<strong>Empieza a conocer y comprar pokemones</strong>
-	</h2>
+	<h2><strong>Empieza a conocer y comprar pokemones</strong></h2>
 
 	<div class="div-ingreso">
 		<div class="campo">
 			<p>Nombre de usuario</p>
-			<input type="text">
+			<input type="text" bind:value={username}>
 		</div>
 		<div class="campo">
 			<p>Contraseña</p>
-			<input type="text">
+			<input type="password" bind:value={password}>
 		</div>
 		<div class="campo">
 			<p>Repite tu contraseña</p>
-			<input type="text">
+			<input type="password" bind:value={repeatPassword}>
 		</div>
+		{#if errorMessage}
+			<p style="color: red;">{errorMessage}</p>
+		{/if}
 		<button class="boton" on:click={irAPagina}>Acceder</button>
 	</div>
-	
-
 </section>
 
 <style>

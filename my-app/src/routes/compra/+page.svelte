@@ -4,25 +4,30 @@
 	import Compra  from '../components/compra-pokemon/Compra.svelte';
 	import MiniPoke from '../components/mini-poke/minipoke.svelte'; // Importamos el componente
     import pokeQuestion from '$lib/images/poke-question.png'; // Imagen de interrogante
-
+    import axios from 'axios';
         // Generar lista de 30 pokes con valores adicionales
-		let miniPokes = [];
-    for (let i = 1; i <= 30; i++) {
-        miniPokes.push({
-            id: i,
-            nombre: `Pokemon ${i}`,
-            imagen: logo, // Usamos la imagen logo para todos
-            hp: Math.floor(Math.random() * 100) + 1, // Valores aleatorios para ilustrar
-            attack: Math.floor(Math.random() * 100) + 1,
-            height: (Math.random() * 2).toFixed(2), // Altura aleatoria entre 0 y 2 metros
-            weight: (Math.random() * 100).toFixed(2) // Peso aleatorio
-        });
+
+
+    interface PokeMini {
+        id: string | number;
+        name: string;
+        image: string;
     }
+	let miniPokes: PokeMini[] = [];
+
+    axios.get('http://127.0.0.1:8000/poke/all/30')
+        .then(response => {
+            console.log(response.data);
+            miniPokes = response.data;
+        })
+        .catch(error => {
+            console.error(error);
+        });
 
 	interface Poke {
         id: string | number;
-        nombre: string;
-        imagen: string;
+        name: string;
+        image: string;
         hp: string | number;
         attack: string | number;
         height: string | number;
@@ -32,8 +37,8 @@
     // Poke seleccionado (inicialmente con valores por defecto)
     let pokeSeleccionado: Poke = {
         id: '?',
-        nombre: '?',
-        imagen: pokeQuestion,
+        name: '?',
+        image: pokeQuestion,
         hp: '?',
         attack: '?',
         height: '?',
@@ -41,8 +46,15 @@
     };
 
     // Función para seleccionar un mini poke
-    function seleccionarPoke(poke: Poke) {
-        pokeSeleccionado = poke;
+    function seleccionarPoke(poke: PokeMini) {
+        axios.get('http://127.0.0.1:8000/poke/' + poke.id)
+        .then(response => {
+            console.log(response.data);
+            pokeSeleccionado = response.data;
+        })
+        .catch(error => {
+            console.error(error);
+        });
     }
 </script>
 

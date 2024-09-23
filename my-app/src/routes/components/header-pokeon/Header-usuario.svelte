@@ -2,6 +2,27 @@
 	import { page } from '$app/stores';
 	import logo from '$lib/images/logo.png';
 	import dinero from '$lib/images/dinero-icon.png';
+    import { onMount } from 'svelte';
+
+		// Variable reactiva para el balance del usuario
+		let balance = 5; // Valor predeterminado
+
+		// Función para obtener el balance del usuario desde sessionStorage
+		function actualizarBalance() {
+			const user_balance = localStorage.getItem('user_balance'); // Obtener el dato guardado
+			if (user_balance) {
+				balance = parseFloat(user_balance); // Convertir a número
+				console.warn("BALANCE PUESTO");
+			} else {
+				console.warn("No se encontró el usuario en localStorage.");
+			}
+		}
+
+		// Llama a la función cuando se monta el componente
+		onMount(() => {
+			actualizarBalance();
+		});
+
 </script>
 
 <header>
@@ -34,7 +55,7 @@
 		</a>
 		<div class="dinero-div">
 			<img src={dinero} alt="logoprecio" width="40px" height="40px">
-			<p>Mi dinero: 5</p>
+			<p>Mi dinero: {balance}</p>
 		</div>
 	</div>
 </header>

@@ -3,8 +3,8 @@
     import ejemplo from '$lib/images/pokemon3.png';
     interface Poke {
         id: string | number;
-        nombre: string;
-        imagen: string;
+        name: string;
+        image: string;
         hp: string | number;
         attack: string | number;
         height: string | number;
@@ -12,9 +12,9 @@
     }
 
     export let pokeSeleccionado: Poke = {
-        nombre: '?',
+        name: '?',
         id: '?',
-        imagen: '$lib/images/poke-question.png',
+        image: '$lib/images/poke-question.png',
         hp: '?',
         attack: '?',
         height: '?',
@@ -23,9 +23,9 @@
 </script>
 
 <div id="info-poke">
-    <img src={pokeSeleccionado.imagen} alt="foto de {pokeSeleccionado.nombre}" height="230px">
+    <img src={pokeSeleccionado.image} alt="foto de {pokeSeleccionado.name}" height="230px">
     <div class="info-txt">
-        <p><strong>Nombre: </strong>{pokeSeleccionado.nombre}</p>
+        <p><strong>Nombre: </strong>{pokeSeleccionado.name}</p>
         <p><strong>Peso: </strong>{pokeSeleccionado.weight} kg</p>
         <p><strong>Altura: </strong>{pokeSeleccionado.height} m</p>
         <p><strong>HP: </strong>{pokeSeleccionado.hp}</p>

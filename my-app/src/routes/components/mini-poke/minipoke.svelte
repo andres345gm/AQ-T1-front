@@ -3,8 +3,8 @@
 </script>
 
 <button class="div-mini" id={poke.id} on:click>
-    <img src={poke.imagen} alt="Imagen de {poke.nombre}" height="60px">
-    <p>{poke.nombre}</p>
+    <img src={poke.image} alt="Imagen de {poke.name}" height="60px">
+    <p>{poke.name}</p>
 </button>
 
 <style>
