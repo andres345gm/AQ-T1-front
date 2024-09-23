@@ -17,7 +17,6 @@
 				console.warn("No se encontró el usuario en localStorage.");
 			}
 		}
-
 		// Llama a la función cuando se monta el componente
 		onMount(() => {
 			actualizarBalance();
@@ -53,10 +52,6 @@
 		<a href="/">
 			Salir
 		</a>
-		<div class="dinero-div">
-			<img src={dinero} alt="logoprecio" width="40px" height="40px">
-			<p>Mi dinero: {balance}</p>
-		</div>
 	</div>
 </header>
 
@@ -160,16 +155,5 @@
 
 	a:hover {
 		color: var(--color-theme-1);
-	}
-
-	.dinero-div
-	{
-		align-items: center;
-		display: flex;
-		gap: 10px;
-		border: 0.5px black solid;
-		border-radius: 1.5rem;
-		padding: 10px;
-		margin-right: 10px;
 	}
 </style>

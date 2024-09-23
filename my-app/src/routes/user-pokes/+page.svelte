@@ -5,10 +5,14 @@
     import Info_poke from '../components/info-pokemon/Info_poke.svelte';
     import MiniPoke from '../components/mini-poke/minipoke.svelte';
     import axios from 'axios';
+    import { onMount } from 'svelte';
+    import dinero from '$lib/images/dinero-icon.png';
     // Generar lista de 30 pokes con valores adicionales
     const user_id = localStorage.getItem('user_id');
 
     const user_id_i = parseInt(user_id ?? '0');
+
+    let balance = 5; // Valor predeterminado
 
     interface PokeMini {
         id: string | number;
@@ -89,6 +93,20 @@
             console.error(error);
         });
     }
+
+    function actualizarBalance() {
+			const user_balance = localStorage.getItem('user_balance'); // Obtener el dato guardado
+			if (user_balance) {
+				balance = parseFloat(user_balance); // Convertir a número
+				console.warn("BALANCE PUESTO");
+			} else {
+				console.warn("No se encontró el usuario en localStorage.");
+			}
+		}
+		// Llama a la función cuando se monta el componente
+		onMount(() => {
+			actualizarBalance();
+		})
 </script>
 
 <svelte:head>
@@ -114,6 +132,11 @@
         </div>
 
         <Info_poke {pokeSeleccionado} />
+    </div>
+
+    <div class="dinero-div">
+        <img src={dinero} alt="logoprecio" width="40px" height="40px">
+        <p>Mi dinero: {balance}</p>
     </div>
 </section>
 
@@ -148,4 +171,16 @@
         display: flex;
         gap: 80px;
     }
+
+    .dinero-div
+	{
+        margin-top: 15px;
+		align-items: center;
+		display: flex;
+		gap: 10px;
+		border: 0.5px black solid;
+		border-radius: 1.5rem;
+		padding: 10px;
+		margin-right: 10px;
+	}
 </style>
