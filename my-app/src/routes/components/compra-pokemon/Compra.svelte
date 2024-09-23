@@ -35,28 +35,35 @@
         const user_id = localStorage.getItem('user_id');
         const user_id_i = parseInt(user_id ?? '0');
         console.log(user_id, pokeSeleccionado.id, 1, "23/09/2024");
+        const user_balance = localStorage.getItem('user_balance');
+        const balance = parseFloat(user_balance ?? '0');
+        
+        if(balance>0)
+        {
+            axios.post(`http://127.0.0.1:8000/purchase/user`,
+                {id_user: user_id_i,
+                id_pokemon: pokeSeleccionado.id,
+                price: 1,
+                date: "23/09/2024"   //date de la forma 10/11/2023
+                },
 
-        axios.post(`http://127.0.0.1:8000/purchase/user`,
-            {id_user: user_id_i,
-             id_pokemon: pokeSeleccionado.id,
-             price: 1,
-             date: "23/09/2024"   //date de la forma 10/11/2023
-            },
-
-        )
-        .then((response) => {
-            // Mostrar mensaje de compra exitosa
-            errorMessage = "Compra realizada con éxito";
-            console.log(response.data);
-            // Actualizar el balance del usuario
-            const user_balance = localStorage.getItem('user_balance');
-            const balance = parseFloat(user_balance ?? '0');
-            localStorage.setItem('user_balance', (balance - 1).toString());
-        }).catch((error) => {
-            console.log(error);
-            // Mostrar error en realizar la compra
-            errorMessage = "No se pudo realizar la compra";
-        });
+            )
+            .then((response) => {
+                // Mostrar mensaje de compra exitosa
+                errorMessage = "Compra realizada con éxito";
+                console.log(response.data);
+                // Actualizar el balance del usuario
+                localStorage.setItem('user_balance', (balance - 1).toString());
+            }).catch((error) => {
+                console.log(error);
+                // Mostrar error en realizar la compra
+                errorMessage = "No se pudo realizar la compra";
+            });
+        }
+        else
+        {
+            errorMessage = "No tienes suficiente dinero";
+        }
 
 
     }

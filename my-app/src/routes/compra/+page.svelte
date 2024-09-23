@@ -8,7 +8,22 @@
     import dinero from '$lib/images/dinero-icon.png';
     import { onMount } from 'svelte';
         // Generar lista de 30 pokes con valores adicionales
-    let balance = 5; // Valor predeterminado
+    let balance = 5; 
+    // Valor predeterminado
+
+    function actualizarBalance() {
+			const user_balance = localStorage.getItem('user_balance'); // Obtener el dato guardado
+			if (user_balance) {
+				balance = parseFloat(user_balance); // Convertir a número
+				console.warn("BALANCE PUESTO");
+			} else {
+				console.warn("No se encontró el usuario en localStorage.");
+			}
+		}
+		// Llama a la función cuando se monta el componente
+		onMount(() => {
+			actualizarBalance();
+		})
 
     interface PokeMini {
         id: string | number;
@@ -58,20 +73,6 @@
             console.error(error);
         });
 
-
-        function actualizarBalance() {
-			const user_balance = localStorage.getItem('user_balance'); // Obtener el dato guardado
-			if (user_balance) {
-				balance = parseFloat(user_balance); // Convertir a número
-				console.warn("BALANCE PUESTO");
-			} else {
-				console.warn("No se encontró el usuario en localStorage.");
-			}
-		}
-		// Llama a la función cuando se monta el componente
-		onMount(() => {
-			actualizarBalance();
-		});
     }
 </script>
 
