@@ -4,25 +4,63 @@
     import pokeQuestion from '$lib/images/poke-question.png'; // Imagen de interrogante
     import Info_poke from '../components/info-pokemon/Info_poke.svelte';
     import MiniPoke from '../components/mini-poke/minipoke.svelte';
-
+    import axios from 'axios';
     // Generar lista de 30 pokes con valores adicionales
-    let miniPokes = [];
-    for (let i = 1; i <= 30; i++) {
-        miniPokes.push({
-            id: i,
-            nombre: `Pokemon ${i}`,
-            imagen: logo, // Usamos la imagen logo para todos
-            hp: Math.floor(Math.random() * 100) + 1, // Valores aleatorios para ilustrar
-            attack: Math.floor(Math.random() * 100) + 1,
-            height: (Math.random() * 2).toFixed(2), // Altura aleatoria entre 0 y 2 metros
-            weight: (Math.random() * 100).toFixed(2) // Peso aleatorio
-        });
+    const user_id = localStorage.getItem('user_id');
+
+    const user_id_i = parseInt(user_id ?? '0');
+
+    interface PokeMini {
+        id: string | number;
+        name: string;
+        image: string;
     }
+
+    interface Purchase {
+        id: number;
+        id_pokemon: number;
+        date: string;
+        price: number;
+        id_user: number;
+    }
+
+	let miniPokes: PokeMini[] = [];
+
+    // Obtener la lista de compras del usuario
+    axios.get('http://127.0.0.1:8000/purchase/user/' + user_id_i)
+        .then(response => {
+            const purchases = response.data;
+
+            // Iterar sobre cada compra
+            const promises = purchases.map((purchase: Purchase) => {
+                const pokemonId = purchase.id_pokemon;
+                return axios.get('http://127.0.0.1:8000/poke/' + pokemonId)
+                    .then(pokeResponse => {
+                        // Crear un mini poke con la información obtenida
+                        return {
+                            id: pokeResponse.data.id,
+                            name: pokeResponse.data.name,
+                            image: pokeResponse.data.image
+                        };
+                    });
+            });
+
+            // Esperar a que todas las peticiones se completen
+            return Promise.all(promises);
+        })
+        .then(miniPokeArray => {
+            miniPokes = miniPokeArray; // Asignar los mini pokes a la lista
+            console.log(miniPokes); // Verificar los mini pokes obtenidos
+        })
+        .catch(error => {
+            console.error(error);
+        });
+
 
 	interface Poke {
         id: string | number;
-        nombre: string;
-        imagen: string;
+        name: string;
+        image: string;
         hp: string | number;
         attack: string | number;
         height: string | number;
@@ -32,8 +70,8 @@
     // Poke seleccionado (inicialmente con valores por defecto)
     let pokeSeleccionado: Poke = {
         id: '?',
-        nombre: '?',
-        imagen: pokeQuestion,
+        name: '?',
+        image: pokeQuestion,
         hp: '?',
         attack: '?',
         height: '?',
@@ -41,8 +79,15 @@
     };
 
     // Función para seleccionar un mini poke
-    function seleccionarPoke(poke: Poke) {
-        pokeSeleccionado = poke;
+    function seleccionarPoke(poke: PokeMini) {
+        axios.get('http://127.0.0.1:8000/poke/' + poke.id)
+        .then(response => {
+            console.log(response.data);
+            pokeSeleccionado = response.data;
+        })
+        .catch(error => {
+            console.error(error);
+        });
     }
 </script>
 
