@@ -1,7 +1,6 @@
 # AQ-T1-FRONT
 
-Este es el frontend del proyecto AQ-T1 desarrollado utilizando **SvelteKit**, un framework moderno para construir aplicaciones web rápidas y escalables.
-
+Este es el frontend del proyecto AQ-T1 desarrollado utilizando **SvelteKit**, un framework moderno para construir aplicaciones web rápidas y escalables. En caso de que se quiera consultar el backend del proyecto, es posible consultarlo por medio del siguiente enlace: https://github.com/andres345gm/AQ-T1-back
 
 ### Carpetas y Archivos Principales
 
